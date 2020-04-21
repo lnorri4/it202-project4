@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang = "en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Project 4</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link href="https://unpkg.com/material-components-web@v4.0.0/dist/material-components-web.min.css" rel="stylesheet">
+  <script src="https://unpkg.com/material-components-web@v4.0.0/dist/material-components-web.min.js"></script>
+
+  <style>
+    .view {
+      display: none;
+    }
+
+    :root {
+      --mdc-theme-primary: #d4af37;
+    }
+  </style>
+
+</head>
+	
+	
+<body>
+	<header class="mdc-top-app-bar" style="left: 0; top: 0;">
+    <div class="mdc-top-app-bar__row">
+      <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
+        <button class="material-icons mdc-top-app-bar__navigation-icon mdc-icon-button mdc-ripple-upgraded--unbounded mdc-ripple-upgraded" style="--mdc-ripple-fg-size:28px; --mdc-ripple-fg-scale:1.71429; --mdc-ripple-left:10px; --mdc-ripple-top:10px;">menu</button>
+        <span class="mdc-top-app-bar__title">COVID 19 INFORMATION: By Luke Norris</span>
+      </section>
+      <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">
+        <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button mdc-ripple-upgraded--unbounded mdc-ripple-upgraded" aria-label="Download" style="--mdc-ripple-fg-size:28px; --mdc-ripple-fg-scale:1.71429; --mdc-ripple-left:10px; --mdc-ripple-top:10px;">file_download</button>
+        <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button mdc-ripple-upgraded--unbounded mdc-ripple-upgraded" aria-label="Print this page" style="--mdc-ripple-fg-size:28px; --mdc-ripple-fg-scale:1.71429; --mdc-ripple-left:10px; --mdc-ripple-top:10px;">print</button>
+        <button class="material-icons mdc-top-app-bar__action-item mdc-icon-button mdc-ripple-upgraded--unbounded mdc-ripple-upgraded" aria-label="Bookmark this page" style="--mdc-ripple-fg-size:28px; --mdc-ripple-fg-scale:1.71429; --mdc-ripple-left:10px; --mdc-ripple-top:10px;">bookmark</button>
+      </section>
+    </div>
+  </header>
+  <aside class="mdc-drawer mdc-drawer--modal">
+    <div class="mdc-drawer__content">
+      <nav class="mdc-list">
+        <a class="mdc-list-item mdc-list-item--activated" href="#enter" aria-current="page" tabindex="0">
+          <i class="material-icons mdc-list-item__graphic" aria-hidden="true"></i>
+          <span class="mdc-list-item__text">Enter input</span>
+        </a>
+        <a class="mdc-list-item" href="#table" tabindex="-1" aria-current="false">
+          <i class="material-icons mdc-list-item__graphic" aria-hidden="true"></i>
+          <span class="mdc-list-item__text">Table</span>
+        </a>
+        <a class="mdc-list-item" href="#chart" tabindex="-1" aria-current="false">
+          <i class="material-icons mdc-list-item__graphic" aria-hidden="true"></i>
+          <span class="mdc-list-item__text">Chart</span>
+        </a>
+      </nav>
+    </div>
+  </aside>
+	
+	
+	<div class="mdc-drawer-scrim"></div>
+	<main class="main-content mdc-top-app-bar--fixed-adjust">
+
+	<div id = "enter" class = "view" style = "display:block;">
+	<h1>The datalist element</h1>
+  	<input id= "Country">
+  	<datalist>
+	<option value="Internet Explorer">
+  	</datalist>
+	<button onclick="AddToSelectedCountries(document.getElementById('Country').value)">Add countries to Search for</button>
+	<!--<button onclick="searchCountries(document.getElementById('Countries').value)">Search Countries</button>-->
+	<p id="Selected_countries"></p>
+	<p id="N"></p>
+	<p id="C"></p>
+	<p id="D"></p>
+	<p id="R"></p>
+	</div>	
+	
+	<div id = "table" class = "view" style = "display:none;">
+		<h>T</h>
+	</div>
+		
+	<div id = "chart" class = "view" style = "display:none;">
+		<h>C</h>
+	</div>	
+		
+	</main>
+	
+<script>
+		const apiEndpoint = "https://pomber.github.io/covid19/timeseries.json?";
+		function AddToSelectedCountries(input){
+			document.getElementById("Selected_countries").innerHTML += " " + input;
+		}
+	
+		function searchCountries(input){
+  			//var x = document.getElementById(input);
+			var con = 0;	var dec = 0;	var rec = 0;
+			/*
+			for (var i = 0; i < ; i++){
+				if (C19_INFO[i] == input){
+					C19_INFO[i].confirmed = confirmed;
+					C19_INFO[i].deceased = deceased;
+					C19_INFO[i].recovered = recovered;
+				}
+			}*/
+			document.getElementById("N").innerHTML = "Here is the information for " + input;
+  			document.getElementById("C").innerHTML = "Found " + con +" confirmed";
+			document.getElementById("D").innerHTML = "Found " + dec +" deceased";
+			document.getElementById("R").innerHTML = "Found " + rec +" recovered";
+			}
+	
+	mdc.topAppBar.MDCTopAppBar.attachTo(document.querySelector('header.mdc-top-app-bar'));
+
+    const drawer = mdc.drawer.MDCDrawer.attachTo(document.querySelector('.mdc-drawer'));
+
+	const hideViews = () => {
+		document.querySelectorAll("div.view").forEach( (item) => {
+			item.style.display = "none";
+		}) 
+	}
+	  
+    document.querySelector(".mdc-top-app-bar__navigation-icon")
+      .addEventListener("click", 
+          (e) => {drawer.open = true;}
+      );
+	  
+	document.querySelectorAll('aside.mdc-drawer a.mdc-list-item').
+		forEach(item => {
+		
+  		item.addEventListener('click', event => {
+			
+		hideViews();
+		let target = item.getAttribute("href");
+		document.querySelector(target).style.display = "block";	
+		drawer.open = "false";
+    	//handle click
+  		})
+	})  
+</script>
+</body>
+		<!--
+		// for each button, get the relevant data and display
+    	document.querySelectorAll(".data-button").forEach( (node) => {
+      
+        node.addEventListener("click", (e) => {
+        
+        let categoryCode = node.getAttribute("data-category-code");
+        let url = apiEndpoint + "sr_short_code=" + categoryCode.toUpperCase();
+
+        let dataList = document.querySelector("div#data ul.mdc-list");*/
+        fetch(url)
+           .then ( (response) => {
+             return response.json();
+           });
+           .then ( (json) => {
+            // empty the list
+
+            while (dataList.firstChild) {
+                dataList.removeChild(dataList.firstChild);  
+            }
+              
+            for (let record of json) {
+
+              // clone template
+              let clone = document.querySelector("div#data li.template").cloneNode(true);
+
+              // remove template class from clone
+              clone.classList.remove("template");
+
+              // add attribute 
+              clone.setAttribute("data-sr-number", record["sr_number"])
+
+              // update value
+              clone.querySelector(".mdc-list-item__primary-text").textContent = record["sr_number"];
+              
+              clone.querySelector(".mdc-list-item__secondary-text").textContent = record["street_address"];
+              let icon = categoryIcons[record["sr_short_code"]];
+              clone.querySelector(".mdc-list-item__graphic.material-icons").textContent = icon;
+
+              // append to list
+              document.querySelector("div#data ul.mdc-list").appendChild(clone);
+
+            }         
+           })    
+      });
+    });
+		-->
+</html>
