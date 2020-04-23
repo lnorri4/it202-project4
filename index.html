@@ -21,33 +21,6 @@
 
 </head>
 	
-   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-   <script type="text/javascript">
-      google.charts.load('current', {'packages':['corechart']});
-      google.charts.setOnLoadCallback(drawChart);
-
-      function drawChart() {
-        var data = google.visualization.arrayToDataTable([
-          ['Date', 'Sales', 'Expenses'],
-          ['2004',  1000,      400],
-          ['2005',  1170,      460],
-          ['2006',  660,       1120],
-          ['2007',  1030,      540],
-		  ['2008',  1000,      400],
-          ['2009',  1170,      460],
-          ['2010',  660,       1120],
-          ['2011',  1030,      540]
-        ]);
-        var options = {
-          title: 'Chart',
-          curveType: 'function',
-          legend: { position: 'bottom' }
-        };
-        var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
-        chart.draw(data, options);
-      }
-    </script>
-	
 <body>
 	<header class="mdc-top-app-bar" style="left: 0; top: 0;">
     <div class="mdc-top-app-bar__row">
@@ -111,8 +84,28 @@
 		
 	</main>
 	
-<script>
-		var list_of_countries = [];
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script type="text/javascript">
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+	  var list_of_countries = [];
+	  var cases = [];
+	  var dates = [];
+	  
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['Date', 'Sales', 'Expenses'],
+		  
+        ]);
+        var options = {
+          title: 'Chart',
+          curveType: 'function',
+          legend: { position: 'bottom' }
+        };
+        var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+        chart.draw(data, options);
+      }	
+		
 	
 		function AddToSelectedCountries(input){
 			list_of_countries.push(input);
@@ -120,8 +113,6 @@
 		}
 			
 		function getdata(){
-			var cases = [];
-			var dates = [];
 			let url = "https://pomber.github.io/covid19/timeseries.json";
 			let count = 0;
 			
