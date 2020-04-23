@@ -21,6 +21,32 @@
 
 </head>
 	
+   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+   <script type="text/javascript">
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['Date', 'Sales', 'Expenses'],
+          ['2004',  1000,      400],
+          ['2005',  1170,      460],
+          ['2006',  660,       1120],
+          ['2007',  1030,      540],
+		  ['2008',  1000,      400],
+          ['2009',  1170,      460],
+          ['2010',  660,       1120],
+          ['2011',  1030,      540]
+        ]);
+        var options = {
+          title: 'Chart',
+          curveType: 'function',
+          legend: { position: 'bottom' }
+        };
+        var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+        chart.draw(data, options);
+      }
+    </script>
 	
 <body>
 	<header class="mdc-top-app-bar" style="left: 0; top: 0;">
@@ -65,58 +91,75 @@
   	<datalist>
 	<option value="Internet Explorer">
   	</datalist>
-	<button onclick="AddToSelectedCountries(document.getElementById('Country').value)">Add countries to Search for</button>
-	<!--<button onclick="searchCountries(document.getElementById('Countries').value)">Search Countries</button>-->
+	<!--<div id="button"><a href="https://light-news.codio.io/#table">Log In</a></div>-->
+	<!--<a href="#table"><button>Search Countries</button></a>-->
+		
+	<button onclick="AddToSelectedCountries(document.getElementById('Country').value)">Add countries to Search for</button>	
+	<button onclick="getdata()">Search countries for data</button>
 	<p id="Selected_countries"></p>
-	<p id="N"></p>
-	<p id="C"></p>
-	<p id="D"></p>
-	<p id="R"></p>
+	<p id="url_info"></p>
 	</div>	
 	
 	<div id = "table" class = "view" style = "display:none;">
-		<h>T</h>
+	<p id="N"></p>
+	<p id="C"></p>
 	</div>
 		
 	<div id = "chart" class = "view" style = "display:none;">
-		<h>C</h>
+		<div id="curve_chart" style="width: 90000px; height: 50000px"></div>
 	</div>	
 		
 	</main>
 	
 <script>
-		const apiEndpoint = "https://pomber.github.io/covid19/timeseries.json?";
+		var list_of_countries = [];
+	
 		function AddToSelectedCountries(input){
-			document.getElementById("Selected_countries").innerHTML += " " + input;
+			list_of_countries.push(input);
+			document.getElementById("Selected_countries").innerHTML = list_of_countries;
 		}
-	
-		function searchCountries(input){
-  			//var x = document.getElementById(input);
-			var con = 0;	var dec = 0;	var rec = 0;
-			/*
-			for (var i = 0; i < ; i++){
-				if (C19_INFO[i] == input){
-					C19_INFO[i].confirmed = confirmed;
-					C19_INFO[i].deceased = deceased;
-					C19_INFO[i].recovered = recovered;
+			
+		function getdata(){
+			var cases = [];
+			var dates = [];
+			let url = "https://pomber.github.io/covid19/timeseries.json";
+			let count = 0;
+			
+			fetch(url).then(response => response.json()).then(data => {
+    			for(let i = 0; i < list_of_countries.length; i++){
+					for(let j = 0; j < list_of_countries[i].length; j++){
+						/*
+						//cases.push([data[list_of_countries[i]].[j].confirmed]);
+						//dates.push([data[list_of_countries[i]].[j].date]);	
+						data[list_of_countries[i]].forEach(({ date, confirmed, recovered, deaths }) =>
+      							console.log(`${date} active cases: ${confirmed - recovered - deaths}`)
+    							);			*/ count++;
+						}
+					}
+  				});
+			
+				
+				
+				/*if(url[i] == countries_array[0]){
+					document.getElementById("url_info").innerHTML = url[i].length;
 				}
-			}*/
-			document.getElementById("N").innerHTML = "Here is the information for " + input;
-  			document.getElementById("C").innerHTML = "Found " + con +" confirmed";
-			document.getElementById("D").innerHTML = "Found " + dec +" deceased";
-			document.getElementById("R").innerHTML = "Found " + rec +" recovered";
-			}
-	
+				else{
+					document.getElementById("url_info").innerHTML = "none";
+				}*/
+			//let dataList = document.querySelector("div#data ul.mdc-list");
+			//var x = 0;
+
+			document.getElementById("N").innerHTML = "Here is the information for " + list_of_countries;
+  			document.getElementById("C").innerHTML = "Found	"+count+" confirmed";
+  			}
+		
 	mdc.topAppBar.MDCTopAppBar.attachTo(document.querySelector('header.mdc-top-app-bar'));
-
     const drawer = mdc.drawer.MDCDrawer.attachTo(document.querySelector('.mdc-drawer'));
-
 	const hideViews = () => {
 		document.querySelectorAll("div.view").forEach( (item) => {
 			item.style.display = "none";
 		}) 
-	}
-	  
+	} 
     document.querySelector(".mdc-top-app-bar__navigation-icon")
       .addEventListener("click", 
           (e) => {drawer.open = true;}
@@ -124,16 +167,15 @@
 	  
 	document.querySelectorAll('aside.mdc-drawer a.mdc-list-item').
 		forEach(item => {
-		
   		item.addEventListener('click', event => {
-			
 		hideViews();
 		let target = item.getAttribute("href");
 		document.querySelector(target).style.display = "block";	
 		drawer.open = "false";
     	//handle click
   		})
-	})  
+	})
+	
 </script>
 </body>
 		<!--
@@ -143,44 +185,13 @@
         node.addEventListener("click", (e) => {
         
         let categoryCode = node.getAttribute("data-category-code");
-        let url = apiEndpoint + "sr_short_code=" + categoryCode.toUpperCase();
-
-        let dataList = document.querySelector("div#data ul.mdc-list");*/
-        fetch(url)
-           .then ( (response) => {
-             return response.json();
-           });
-           .then ( (json) => {
-            // empty the list
-
-            while (dataList.firstChild) {
-                dataList.removeChild(dataList.firstChild);  
-            }
-              
-            for (let record of json) {
-
-              // clone template
-              let clone = document.querySelector("div#data li.template").cloneNode(true);
-
-              // remove template class from clone
-              clone.classList.remove("template");
-
-              // add attribute 
-              clone.setAttribute("data-sr-number", record["sr_number"])
-
-              // update value
-              clone.querySelector(".mdc-list-item__primary-text").textContent = record["sr_number"];
-              
-              clone.querySelector(".mdc-list-item__secondary-text").textContent = record["street_address"];
-              let icon = categoryIcons[record["sr_short_code"]];
-              clone.querySelector(".mdc-list-item__graphic.material-icons").textContent = icon;
-
-              // append to list
-              document.querySelector("div#data ul.mdc-list").appendChild(clone);
-
-            }         
-           })    
+        let url = apiEndpoint + "sr_short_code=" + categoryCode.toUpperCase();*/
+         
       });
     });
+
+I pulled the data I needed based on what I selected, 
+looped through based on the selected countries, made a 2d array and made the table and chart
+-John La
 		-->
 </html>
